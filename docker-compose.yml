@@ -1,0 +1,64 @@
+version: '3.7'
+services:
+  user-service:
+    image: epamgrzegorzchabiera/user-service:1.0.0
+    ports:
+      - "8080:8080"
+    environment:
+      - spring_datasource_url=jdbc:postgresql://postgres-user:5432/user-service
+      - spring_datasource_username=postgres
+      - spring_datasource_password=pass
+  postgres-user:
+     image: postgres:15.2-alpine
+     ports:
+       - "5432:5432"
+     environment:
+       POSTGRES_DB: user-service
+       POSTGRES_USER: "postgres"
+       POSTGRES_PASSWORD: "pass"
+       PGDATA: /var/lib/postgresql/data/pgdata
+     volumes:
+       - /var/postgres
+     restart: unless-stopped
+  pgadmin-user:
+    image: dpage/pgadmin4:7.0
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "user@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "pass"
+    volumes:
+      - /var/lib/pgadmin
+  post-service:
+    image: epamgrzegorzchabiera/post-service:1.0.0
+    ports:
+      - "8081:8081"
+    environment:
+      - spring_datasource_url=jdbc:postgresql://postgres-post:5431/post-service
+      - spring_datasource_username=postgres
+      - spring_datasource_password=pass
+      - user_service_base_path=http://user-service:8080
+  postgres-post:
+    image: postgres:15.2-alpine
+    expose:
+      - "5431"
+    ports:
+      - "5431:5431"
+    command: -p 5431
+    environment:
+      POSTGRES_DB: post-service
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "pass"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - /var/postgres
+    restart: unless-stopped
+  pgadmin-post:
+    image: dpage/pgadmin4:7.0
+    ports:
+      - "5051:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "post@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "pass"
+    volumes:
+      - /var/lib/pgadmin
