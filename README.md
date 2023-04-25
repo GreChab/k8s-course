@@ -8,5 +8,5 @@ The aim of project is to handle post created by user. It consists of two microse
 ## Run
 To start both microservices use docker-compose.yml file. Go to root directory of project and execute the following command in terminal:
 
-    _docker-compose -f docker-compose.yml up_
+    docker-compose -f docker-compose.yml up
 
