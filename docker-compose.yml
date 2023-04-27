@@ -30,7 +30,7 @@ services:
     volumes:
       - /var/lib/pgadmin
   post-service:
-    image: epamgrzegorzchabiera/post-service:1.0.0
+    image: epamgrzegorzchabiera/post-service:1.0.1
     ports:
       - "8081:8081"
     environment:
