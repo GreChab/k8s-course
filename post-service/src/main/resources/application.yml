@@ -1,6 +1,11 @@
 server:
   port: 8081
 
+user:
+  service:
+    base:
+      path: ${user_service_base_path}
+
 spring:
   application:
     name: post-service

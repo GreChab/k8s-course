@@ -72,7 +72,7 @@ public class PostService {
 
     private Optional<UserResponse> getUserResponse(Long id) {
         return Optional.ofNullable(Objects.requireNonNull(webClient.get()
-                .uri("http://user-service:8080/users/{id}", id)
+                .uri(getUserServiceUrl(id))
                 .retrieve()
                 .toEntity(UserResponse.class)
                 .block()).getBody());
