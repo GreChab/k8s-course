@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pg-post-statefulset
+  namespace: k8s-course
+  labels:
+    app: pg-post
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-post
+  template:
+    metadata:
+      labels:
+        app: pg-post
+    spec:
+      containers:
+        - name: postgres-post
+          image: postgres:15.2-alpine
+          ports:
+            - containerPort: 5431
+          env:
+            - name: PGPORT
+              value: "5431"
+            - name: POSTGRES_DB
+              value: post-service
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: pass
+          volumeMounts:
+            - name: pg-post-db
+              mountPath: /var/lib/postgresql/data
+              subPath: postdata
+  volumeClaimTemplates:
+    - metadata:
+        name: pg-post-db
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: "hostpath"
+        resources:
+          requests:
+            storage: 1Gi
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-post-service
+  namespace: k8s-course
+spec:
+  type: ClusterIP
+  selector:
+    app: pg-post
+  ports:
+    - protocol: TCP
+      port: 5431
+      targetPort: 5431

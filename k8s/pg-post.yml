@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-post-deployment
+  namespace: k8s-course
+  labels:
+    app: pg-post
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-post
+  template:
+    metadata:
+      labels:
+        app: pg-post
+    spec:
+      containers:
+        - name: postgres-post
+          image: postgres:15.2-alpine
+          ports:
+            - containerPort: 5431
+          env:
+            - name: PGPORT
+              value: "5431"
+            - name: POSTGRES_DB
+              value: post-service
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: pass
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-post-service
+  namespace: k8s-course
+spec:
+  selector:
+    app: pg-post
+  ports:
+    - protocol: TCP
+      port: 5431
+      targetPort: 5431
