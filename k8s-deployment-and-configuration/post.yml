@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-deployment
+  namespace: k8s-course
+  labels:
+    app: post
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: post
+  template:
+    metadata:
+      labels:
+        app: post
+    spec:
+      containers:
+        - name: post
+          image: epamgrzegorzchabiera/post-service:1.0.1
+          ports:
+            - containerPort: 8081
+          env:
+            - name: user_service_base_path
+              valueFrom:
+                configMapKeyRef:
+                  name: app-configmap
+                  key: user_service_base_path
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-configmap
+                  key: post_datasource_url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: post_datasource_username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: post_datasource_password
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: post-service
+  namespace: k8s-course
+spec:
+  type: NodePort
+  selector:
+    app: post
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+      nodePort: 30001
