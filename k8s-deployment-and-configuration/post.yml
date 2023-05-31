@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: post
-          image: epamgrzegorzchabiera/post-service:1.0.1
+          image: epamgrzegorzchabiera/post-service:1.0.2
           ports:
             - containerPort: 8081
           env:

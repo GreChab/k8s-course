@@ -45,6 +45,16 @@ spec:
             - name: pg-user-db
               mountPath: /var/lib/postgresql/data
               subPath: userdata
+            - name: pg-schema-script
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
+      volumes:
+        - name: pg-schema-script
+          configMap:
+            name: app-configmap
+            items:
+              - key: "user_schema.sql"
+                path: "schema.sql"
   volumeClaimTemplates:
     - metadata:
         name: pg-user-db

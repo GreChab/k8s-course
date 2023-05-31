@@ -45,6 +45,16 @@ spec:
             - name: pg-post-db
               mountPath: /var/lib/postgresql/data
               subPath: postdata
+            - name: pg-schema-script
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
+      volumes:
+        - name: pg-schema-script
+          configMap:
+            name: app-configmap
+            items:
+              - key: "post_schema.sql"
+                path: "schema.sql"
   volumeClaimTemplates:
     - metadata:
         name: pg-post-db

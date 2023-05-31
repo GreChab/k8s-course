@@ -11,3 +11,22 @@ data:
   user_postgres_db: user-service
   app-configmap: "5431"
   post_postgres_db: post-service
+  user_schema.sql: |
+    DROP TABLE IF EXISTS public.t_user;
+    CREATE TABLE t_user
+    (
+        id smallserial NOT NULL,
+        username character varying(255),
+        amount character varying(255),
+        CONSTRAINT t_user_pkey PRIMARY KEY (id)
+    )
+  post_schema.sql: |
+    DROP TABLE IF EXISTS public.t_post;
+    CREATE TABLE IF NOT EXISTS public.t_post
+    (
+        id smallserial NOT NULL,
+        author_id bigint,
+        posted_at date,
+        text character varying(255),
+        CONSTRAINT t_post_pkey PRIMARY KEY (id)
+    )
