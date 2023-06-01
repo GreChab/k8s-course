@@ -19,6 +19,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long authorId;
+    private String topic;
     private String text;
     private LocalDate postedAt;
 }

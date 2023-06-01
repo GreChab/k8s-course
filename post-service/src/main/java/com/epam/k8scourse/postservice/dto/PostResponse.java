@@ -14,6 +14,7 @@ import java.time.LocalDate;
 public class PostResponse {
     private Long id;
     private Long authorId;
+    private String topic;
     private String text;
     private LocalDate postedAt;
 }

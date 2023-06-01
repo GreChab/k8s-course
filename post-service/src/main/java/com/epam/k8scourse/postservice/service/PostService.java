@@ -30,7 +30,9 @@ public class PostService {
     private final WebClient webClient;
 
     public PostResponse createPost(PostRequest postRequest) {
-        if (Objects.nonNull(postRequest.getAuthorId()) && exist(postRequest.getText())) {
+        if (Objects.nonNull(postRequest.getAuthorId())
+                && exist(postRequest.getText())
+                && exist(postRequest.getTopic())) {
             try {
                 return getUserResponse(postRequest.getAuthorId())
                         .map((userResponse) -> createPost(userResponse, postRequest)).get();
@@ -79,9 +81,10 @@ public class PostService {
     }
 
     private PostResponse createPost(UserResponse userResponse, PostRequest postRequest) {
-        if (exist(postRequest.getText())) {
+        if (exist(postRequest.getText()) && exist(postRequest.getTopic())) {
             Post post = Post.builder()
                     .authorId(userResponse.getId())
+                    .topic(postRequest.getTopic())
                     .text(postRequest.getText())
                     .postedAt(LocalDate.now())
                     .build();
@@ -125,16 +128,18 @@ public class PostService {
         return PostResponse.builder()
                 .id(post.getId())
                 .authorId(post.getAuthorId())
+                .topic(post.getTopic())
                 .text(post.getText())
                 .postedAt(post.getPostedAt())
                 .build();
     }
 
     private PostResponse updatePost(Post currentPost, PostRequest postRequest) {
-        if (exist(postRequest.getText())) {
+        if (exist(postRequest.getText()) && exist(postRequest.getTopic())) {
             Post updatedPost = Post.builder()
                     .id(currentPost.getId())
                     .authorId(currentPost.getAuthorId())
+                    .topic(postRequest.getTopic())
                     .text(postRequest.getText())
                     .postedAt(LocalDate.now())
                     .build();
