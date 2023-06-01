@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: user
-          image: epamgrzegorzchabiera/user-service:1.0.1
+          image: epamgrzegorzchabiera/user-service:1.0.2
           ports:
             - containerPort: 8080
           env:
@@ -36,6 +36,27 @@ spec:
                 secretKeyRef:
                   name: app-secret
                   key: user_datasource_password
+          startupProbe:
+            httpGet:
+              path: /users/1
+              port: 8080
+            initialDelaySeconds: 30
+            failureThreshold: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
 
 ---
 

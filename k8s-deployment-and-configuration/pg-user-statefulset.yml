@@ -48,6 +48,28 @@ spec:
             - name: pg-schema-script
               mountPath: /docker-entrypoint-initdb.d
               readOnly: true
+          startupProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -d pg-user
+            initialDelaySeconds: 5
+            periodSeconds: 3
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -d pg-user
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -d pg-user
+            periodSeconds: 10
       volumes:
         - name: pg-schema-script
           configMap:
