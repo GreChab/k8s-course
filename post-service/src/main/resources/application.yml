@@ -27,3 +27,11 @@ management:
       show-details: always
       probes:
         enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+info:
+  application:
+    version: 1.0.7
