@@ -22,8 +22,22 @@ spring:
       mode: always
 
 management:
+  info:
+    env:
+      enabled: true
   endpoint:
+    info:
+      enabled: true
     health:
       show-details: always
       probes:
         enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+
+info:
+  application:
+    version: 1.0.9

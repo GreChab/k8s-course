@@ -27,6 +27,7 @@ data:
         id smallserial NOT NULL,
         author_id bigint,
         posted_at date,
+        topic character varying(255),
         text character varying(255),
         CONSTRAINT t_post_pkey PRIMARY KEY (id)
     )
