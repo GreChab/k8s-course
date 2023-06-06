@@ -35,12 +35,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: app-secret
-                  key: postgres_user
+                  key: user_datasource_username
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: app-secret
-                  key: postgres_password
+                  key: user_datasource_password
           volumeMounts:
             - name: pg-user-db
               mountPath: /var/lib/postgresql/data
