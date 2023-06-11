@@ -1,0 +1,5 @@
+apiVersion: v2
+name: k8s-helm-overview
+description: A Helm chart for K8s-course
+type: application
+version: "1.0.0"
