@@ -1,66 +1,59 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: post-deployment
+  name: user-deployment
   namespace: {{ .Values.namespace }}
   labels:
-    app: post
+    app: user
 spec:
   replicas: {{ .Values.replicaCount }}
-  strategy:
-    type: RollingUpdate
   selector:
     matchLabels:
-      app: post
+      app: user
   template:
     metadata:
       labels:
-        app: post
+        app: user
     spec:
       containers:
-        - name: post
-          image: epamgrzegorzchabiera/post-service:1.0.9
+        - name: user
+          image: epamgrzegorzchabiera/user-service:1.0.2
           ports:
-            - containerPort: 8081
+            - containerPort: 8080
           env:
-            - name: user_service_base_path
-              valueFrom:
-                configMapKeyRef:
-                  name: app-configmap
-                  key: user_service_base_path
             - name: SPRING_DATASOURCE_URL
               valueFrom:
                 configMapKeyRef:
                   name: app-configmap
-                  key: post_datasource_url
+                  key: user_datasource_url
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: app-secret
-                  key: post_datasource_username
+                  key: user_datasource_username
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: app-secret
-                  key: post_datasource_password
+                  key: user_datasource_password
           startupProbe:
             httpGet:
-              path: /posts/1
-              port: 8081
+              path: /users/1
+              port: 8080
             initialDelaySeconds: 30
             failureThreshold: 3
-            periodSeconds: 5
+            periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 8081
+              port: 8080
             initialDelaySeconds: 5
             periodSeconds: 5
             failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 8081
+              port: 8080
             initialDelaySeconds: 5
             periodSeconds: 5
             failureThreshold: 3
@@ -70,14 +63,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: post-service
+  name: user-service
   namespace: {{ .Values.namespace }}
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
-    app: post
+    app: user
   ports:
     - protocol: TCP
-      port: 8081
-      targetPort: 8081
-      nodePort: 30001
+      port: 8080
+      targetPort: 8080
