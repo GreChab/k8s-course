@@ -9,19 +9,19 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    http:
-      paths:
-        - path: /user-app(/|$)(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: user-service
-              port:
-                number: 8080
-        - path: /post-app(/|$)(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: post-service
-              port:
-                number: 8081
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /user-app(/|$)(.*)
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 8080
+          - pathType: Prefix
+            path: /post-app(/|$)(.*)
+            backend:
+              service:
+                name: post-service
+                port:
+                  number: 8081
